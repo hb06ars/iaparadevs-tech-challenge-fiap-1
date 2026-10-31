@@ -1,0 +1,42 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambientes virtuais
+venv/
+.venv/
+env/
+ENV/
+
+# Configurações do PyCharm
+.idea/
+
+# Arquivos de configuração locais
+*.iml
+
+# Distribuição / empacotamento
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log
+
+# Testes
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Cache do MyPy
+.mypy_cache/
+
+# Cache do Ruff
+.ruff_cache/
+
+# Cache geral
+.cache/
+
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db
