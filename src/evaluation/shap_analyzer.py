@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -12,7 +11,6 @@ class SHAPAnalyzer:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def analyze(self, model, X_validation):
-
         print("\n=== INICIANDO ANÁLISE SHAP ===")
 
         # Recupera o classificador Random Forest
@@ -44,7 +42,7 @@ class SHAPAnalyzer:
         plt.tight_layout()
 
         beeswarm_path = (
-            self.output_dir / "shap_beeswarm.png"
+                self.output_dir / "shap_beeswarm.png"
         )
 
         plt.savefig(

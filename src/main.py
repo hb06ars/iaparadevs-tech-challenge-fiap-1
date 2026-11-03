@@ -72,6 +72,9 @@ class Main:
         for name, dataset in datasets.items():
             print(f"{name}: {dataset.shape}")
 
+
+
+
         # TREINAMENTO DE REGRESSÃO LOGÍSTICA
         logistic_model = LogisticRegressionModel()
 
@@ -91,19 +94,22 @@ class Main:
         print("\n=== DISTRIBUIÇÃO DAS PREVISÕES ===")
         print(pd.Series(predictions).value_counts().sort_index())
 
-        # AVALIAÇÃO DO MODELO
+        # Avaliação do modelo de regressão logística
         evaluator = ModelEvaluator(
             output_dir=self.graphics_path
         )
 
-        metrics = evaluator.evaluate(
+        metrics_logistic_regression = evaluator.evaluate(
             y_true=datasets["y_validation"],
             y_pred=predictions,
             model_name="Regressao Logistica"
         )
 
         print("\n=== RESULTADO DAS MÉTRICAS ===")
-        print(metrics)
+        print(metrics_logistic_regression)
+
+
+
 
         # TREINAMENTO RANDOM FOREST
         random_forest = RandomForestModel()
@@ -127,6 +133,11 @@ class Main:
         print("\n=== RESULTADO RANDOM FOREST ===")
         print(rf_metrics)
 
+
+
+
+
+
         # TREINAMENTO SVM
         svm_model = SVMModel()
 
@@ -149,16 +160,26 @@ class Main:
         print("\n=== RESULTADO SVM ===")
         print(svm_metrics)
 
+
+
+
+
+
         # COMPARAÇÃO DE MODELOS
         comparison = ModelComparison(
             output_dir=self.metrics_path
         )
 
         comparison.compare([
-            metrics,
+            metrics_logistic_regression,
             rf_metrics,
             svm_metrics
         ])
+
+
+
+
+
 
         # ANÁLISE DE IMPORTÂNCIA DAS CARACTERÍSTICAS
         feature_analyzer = FeatureImportanceAnalyzer(
@@ -171,6 +192,11 @@ class Main:
             top_n=15
         )
 
+
+
+
+
+
         # ANÁLISE SHAP
         shap_analyzer = SHAPAnalyzer(
             output_dir=self.graphics_path
@@ -180,6 +206,10 @@ class Main:
             model=random_forest,
             X_validation=datasets["X_validation"]
         )
+
+
+
+
 
         # VALIDAÇÃO CRUZADA
         cross_validator = CrossValidationEvaluator(
@@ -198,6 +228,10 @@ class Main:
             X_train=datasets["X_train"],
             y_train=datasets["y_train"]
         )
+
+
+
+
 
         # ==========================================
         # AVALIAÇÃO FINAL DO MODELO

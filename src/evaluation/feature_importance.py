@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -13,7 +12,6 @@ class FeatureImportanceAnalyzer:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def analyze(self, model, feature_names, top_n=15):
-
         print("\n=== ANÁLISE DE FEATURE IMPORTANCE ===")
 
         # Recupera as importâncias calculadas pelo Random Forest

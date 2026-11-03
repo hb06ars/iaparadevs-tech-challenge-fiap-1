@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 import pandas as pd
@@ -7,12 +6,10 @@ import pandas as pd
 class ModelComparison:
 
     def __init__(self, output_dir):
-
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def compare(self, model_results):
-
         dataframe = pd.DataFrame(model_results)
 
         dataframe = dataframe.sort_values(

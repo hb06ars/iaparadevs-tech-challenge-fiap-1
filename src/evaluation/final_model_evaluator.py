@@ -1,8 +1,8 @@
-
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import pandas as pd
-
+import seaborn as sns
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -12,14 +12,10 @@ from sklearn.metrics import (
     confusion_matrix
 )
 
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 
 class FinalModelEvaluator:
 
     def __init__(self, metrics_dir, graphics_dir):
-
         self.metrics_dir = Path(metrics_dir)
         self.graphics_dir = Path(graphics_dir)
 
@@ -27,7 +23,6 @@ class FinalModelEvaluator:
         self.graphics_dir.mkdir(parents=True, exist_ok=True)
 
     def evaluate(self, y_true, y_pred):
-
         print("\n=== AVALIAÇÃO FINAL NO CONJUNTO DE TESTE ===")
 
         accuracy = accuracy_score(y_true, y_pred)
@@ -73,11 +68,10 @@ class FinalModelEvaluator:
         return metrics
 
     def save_metrics(self, metrics):
-
         dataframe = pd.DataFrame([metrics])
 
         output_file = (
-            self.metrics_dir / "avaliacao_final_teste.csv"
+                self.metrics_dir / "avaliacao_final_teste.csv"
         )
 
         dataframe.to_csv(output_file, index=False)
@@ -85,7 +79,6 @@ class FinalModelEvaluator:
         print(f"\nMétricas salvas em: {output_file}")
 
     def plot_confusion_matrix(self, y_true, y_pred):
-
         matrix = confusion_matrix(
             y_true,
             y_pred,
@@ -110,7 +103,7 @@ class FinalModelEvaluator:
         plt.tight_layout()
 
         output_file = (
-            self.graphics_dir / "matriz_confusao_teste.png"
+                self.graphics_dir / "matriz_confusao_teste.png"
         )
 
         plt.savefig(

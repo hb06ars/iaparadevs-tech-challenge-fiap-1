@@ -1,10 +1,7 @@
-
 from pathlib import Path
 
 import pandas as pd
-
 from sklearn.model_selection import StratifiedKFold, cross_validate
-
 
 class CrossValidationEvaluator:
 
@@ -12,7 +9,6 @@ class CrossValidationEvaluator:
 
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
-
         self.number_of_folds = number_of_folds
 
         self.scoring = {
@@ -54,7 +50,6 @@ class CrossValidationEvaluator:
             }
 
             for metric in self.scoring:
-
                 values = scores[f"test_{metric}"]
 
                 mean_value = values.mean()
@@ -74,7 +69,7 @@ class CrossValidationEvaluator:
         dataframe = pd.DataFrame(results)
 
         output_file = (
-            self.output_dir / "validacao_cruzada.csv"
+                self.output_dir / "validacao_cruzada.csv"
         )
 
         dataframe.to_csv(output_file, index=False)

@@ -1,6 +1,3 @@
-
-import pandas as pd
-
 from sklearn.model_selection import train_test_split
 
 
@@ -64,12 +61,12 @@ class DataPreprocessor:
         # Segundo: divide os 30% temporários igualmente
         self.X_validation, self.X_test, \
             self.y_validation, self.y_test = train_test_split(
-                X_temp,
-                y_temp,
-                test_size=0.50,
-                random_state=42,
-                stratify=y_temp
-            )
+            X_temp,
+            y_temp,
+            test_size=0.50,
+            random_state=42,
+            stratify=y_temp
+        )
 
         print(f"Treinamento: {len(self.X_train)} registros")
         print(f"Validação: {len(self.X_validation)} registros")
@@ -86,7 +83,6 @@ class DataPreprocessor:
         }
 
         for name, target in datasets.items():
-
             print(f"\n{name}:")
 
             distribution = target.value_counts(
