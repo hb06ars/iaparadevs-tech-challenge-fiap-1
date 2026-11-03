@@ -28,7 +28,6 @@ class Main:
 
     def execute(self):
         print("\n=== CARREGANDO DATASET ===")
-
         df = self.dataset_loader.load()
 
         print("\n=== DIMENSÕES ===")
