@@ -5,6 +5,7 @@ import pandas as pd
 from src.evaluation.feature_importance import FeatureImportanceAnalyzer
 from src.evaluation.model_comparison import ModelComparison
 from src.evaluation.model_evaluator import ModelEvaluator
+from src.evaluation.shap_analyzer import SHAPAnalyzer
 from src.exploration.data_exploration import DataExploration
 from src.models.logistic_regression import LogisticRegressionModel
 from src.models.random_forest import RandomForestModel
@@ -146,6 +147,7 @@ class Main:
         print("\n=== RESULTADO SVM ===")
         print(svm_metrics)
 
+
         # COMPARAÇÃO DE MODELOS
         comparison = ModelComparison(
             output_dir=self.metrics_path
@@ -156,7 +158,6 @@ class Main:
             rf_metrics,
             svm_metrics
         ])
-
 
 
         # ANÁLISE DE IMPORTÂNCIA DAS CARACTERÍSTICAS
@@ -171,6 +172,15 @@ class Main:
         )
 
 
+        # ANÁLISE SHAP
+        shap_analyzer = SHAPAnalyzer(
+            output_dir=self.graphics_path
+        )
+
+        shap_values = shap_analyzer.analyze(
+            model=random_forest,
+            X_validation=datasets["X_validation"]
+        )
 
 
 
