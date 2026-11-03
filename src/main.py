@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from src.evaluation.cross_validation_evaluator import CrossValidationEvaluator
 from src.evaluation.feature_importance import FeatureImportanceAnalyzer
 from src.evaluation.model_comparison import ModelComparison
 from src.evaluation.model_evaluator import ModelEvaluator
@@ -147,7 +148,6 @@ class Main:
         print("\n=== RESULTADO SVM ===")
         print(svm_metrics)
 
-
         # COMPARAÇÃO DE MODELOS
         comparison = ModelComparison(
             output_dir=self.metrics_path
@@ -158,7 +158,6 @@ class Main:
             rf_metrics,
             svm_metrics
         ])
-
 
         # ANÁLISE DE IMPORTÂNCIA DAS CARACTERÍSTICAS
         feature_analyzer = FeatureImportanceAnalyzer(
@@ -171,7 +170,6 @@ class Main:
             top_n=15
         )
 
-
         # ANÁLISE SHAP
         shap_analyzer = SHAPAnalyzer(
             output_dir=self.graphics_path
@@ -183,6 +181,25 @@ class Main:
         )
 
 
+
+
+        # VALIDAÇÃO CRUZADA
+        cross_validator = CrossValidationEvaluator(
+            output_dir=self.metrics_path,
+            number_of_folds=5
+        )
+
+        models = {
+            "Regressao Logistica": logistic_model.get_model(),
+            "Random Forest": random_forest.get_model(),
+            "SVM": svm_model.get_model()
+        }
+
+        cross_validation_results = cross_validator.evaluate(
+            models=models,
+            X_train=datasets["X_train"],
+            y_train=datasets["y_train"]
+        )
 
 
 if __name__ == "__main__":
