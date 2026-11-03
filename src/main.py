@@ -7,7 +7,7 @@ from src.exploration.data_exploration import DataExploration
 from src.models.logistic_regression import LogisticRegressionModel
 from src.preprocessing.data_preprocessor import DataPreprocessor
 from src.preprocessing.dataset_loader import DatasetLoader
-
+from src.models.random_forest import RandomForestModel
 
 class Main:
 
@@ -92,6 +92,31 @@ class Main:
 
         print("\n=== RESULTADO DAS MÉTRICAS ===")
         print(metrics)
+
+
+
+
+        # TREINAMENTO RANDOM FOREST
+        random_forest = RandomForestModel()
+
+        random_forest.train(
+            datasets["X_train"],
+            datasets["y_train"]
+        )
+
+        rf_predictions = random_forest.predict(
+            datasets["X_validation"]
+        )
+
+        # Avaliação Random Forest
+        rf_metrics = evaluator.evaluate(
+            y_true=datasets["y_validation"],
+            y_pred=rf_predictions,
+            model_name="Random Forest"
+        )
+
+        print("\n=== RESULTADO RANDOM FOREST ===")
+        print(rf_metrics)
 
 
 if __name__ == "__main__":
