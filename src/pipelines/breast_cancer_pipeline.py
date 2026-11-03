@@ -14,7 +14,7 @@ from src.models.random_forest import RandomForestModel
 from src.models.svm_model import SVMModel
 from src.preprocessing.data_preprocessor import DataPreprocessor
 from src.preprocessing.dataset_loader import DatasetLoader
-
+from src.persistence.model_serializer import ModelSerializer
 
 class BreastCancerPipeline:
 
@@ -40,6 +40,14 @@ class BreastCancerPipeline:
                 / "metrics"
         )
 
+        self.model_path = (
+                self.project_root
+                / "models"
+                / "breast_cancer_logistic_regression.joblib"
+        )
+
+        self.model_serializer = ModelSerializer()
+
         self.dataset_loader = DatasetLoader(self.dataset_path)
 
         # Resultados disponíveis durante a execução
@@ -63,6 +71,7 @@ class BreastCancerPipeline:
         self.execute_shap_analysis()
         self.execute_cross_validation()
         self.execute_final_evaluation()
+        self.save_final_model()
 
         print("\n========================================")
         print(" PIPELINE FINALIZADO COM SUCESSO")
@@ -308,3 +317,12 @@ class BreastCancerPipeline:
 
         print("\n=== RESULTADO FINAL ===")
         print(self.final_metrics)
+
+
+    def save_final_model(self):
+        print("\n=== SALVANDO MODELO FINAL ===")
+        self.model_serializer.save(
+            model=self.final_model.get_model(),
+            file_path=self.model_path
+        )
+
