@@ -2,13 +2,15 @@ from pathlib import Path
 
 import pandas as pd
 
+from src.evaluation.model_comparison import ModelComparison
 from src.evaluation.model_evaluator import ModelEvaluator
 from src.exploration.data_exploration import DataExploration
 from src.models.logistic_regression import LogisticRegressionModel
-from src.preprocessing.data_preprocessor import DataPreprocessor
-from src.preprocessing.dataset_loader import DatasetLoader
 from src.models.random_forest import RandomForestModel
 from src.models.svm_model import SVMModel
+from src.preprocessing.data_preprocessor import DataPreprocessor
+from src.preprocessing.dataset_loader import DatasetLoader
+
 
 class Main:
 
@@ -28,8 +30,13 @@ class Main:
                 / "graphics"
         )
 
-        self.dataset_loader = DatasetLoader(dataset_path)
+        self.metrics_path = (
+                self.project_root
+                / "results"
+                / "metrics"
+        )
 
+        self.dataset_loader = DatasetLoader(dataset_path)
 
     def execute(self):
         print("\n=== CARREGANDO DATASET ===")
@@ -94,9 +101,6 @@ class Main:
         print("\n=== RESULTADO DAS MÉTRICAS ===")
         print(metrics)
 
-
-
-
         # TREINAMENTO RANDOM FOREST
         random_forest = RandomForestModel()
 
@@ -119,7 +123,6 @@ class Main:
         print("\n=== RESULTADO RANDOM FOREST ===")
         print(rf_metrics)
 
-
         # TREINAMENTO SVM
         svm_model = SVMModel()
 
@@ -141,6 +144,19 @@ class Main:
 
         print("\n=== RESULTADO SVM ===")
         print(svm_metrics)
+
+
+
+        # COMPARAÇÃO DE MODELOS
+        comparison = ModelComparison(
+            output_dir=self.metrics_path
+        )
+
+        comparison.compare([
+            metrics,
+            rf_metrics,
+            svm_metrics
+        ])
 
 
 if __name__ == "__main__":
