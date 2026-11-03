@@ -4,6 +4,7 @@ import pandas as pd
 
 from src.evaluation.cross_validation_evaluator import CrossValidationEvaluator
 from src.evaluation.feature_importance import FeatureImportanceAnalyzer
+from src.evaluation.final_model_evaluator import FinalModelEvaluator
 from src.evaluation.model_comparison import ModelComparison
 from src.evaluation.model_evaluator import ModelEvaluator
 from src.evaluation.shap_analyzer import SHAPAnalyzer
@@ -200,6 +201,58 @@ class Main:
             X_train=datasets["X_train"],
             y_train=datasets["y_train"]
         )
+
+
+
+
+
+        # ==========================================
+        # AVALIAÇÃO FINAL DO MODELO
+        # ==========================================
+
+        print("\n=== PREPARANDO TREINAMENTO FINAL ===")
+
+        # Junta treinamento e validação
+        X_final_train = pd.concat([
+            datasets["X_train"],
+            datasets["X_validation"]
+        ])
+
+        y_final_train = pd.concat([
+            datasets["y_train"],
+            datasets["y_validation"]
+        ])
+
+        print(f"Registros para treinamento: {len(X_final_train)}")
+        print(f"Registros reservados para teste: {len(datasets['X_test'])}")
+
+        # Cria uma nova instância do modelo
+        final_model = LogisticRegressionModel()
+
+        # Treina novamente com os 483 registros
+        final_model.train(
+            X_final_train,
+            y_final_train
+        )
+
+        # Realiza previsões somente no conjunto de teste
+        test_predictions = final_model.predict(
+            datasets["X_test"]
+        )
+
+        # Avaliação final
+        final_evaluator = FinalModelEvaluator(
+            metrics_dir=self.metrics_path,
+            graphics_dir=self.graphics_path
+        )
+
+        final_metrics = final_evaluator.evaluate(
+            y_true=datasets["y_test"],
+            y_pred=test_predictions
+        )
+
+        print("\n=== RESULTADO FINAL ===")
+        print(final_metrics)
 
 
 if __name__ == "__main__":
