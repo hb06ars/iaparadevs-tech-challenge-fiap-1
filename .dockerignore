@@ -1,0 +1,29 @@
+# Ambientes virtuais
+.venv/
+.venv_validation/
+venv/
+
+# Cache Python
+__pycache__/
+*.py[cod]
+
+# Configurações de IDE
+.idea/
+.vscode/
+
+# Git
+.git/
+.gitignore
+
+# Dados de pneumonia (dataset grande)
+data/pneumonia/
+
+# Notebooks
+notebooks/
+
+# Resultados temporários
+.ipynb_checkpoints/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
