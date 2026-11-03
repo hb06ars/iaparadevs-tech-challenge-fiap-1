@@ -8,6 +8,7 @@ from src.models.logistic_regression import LogisticRegressionModel
 from src.preprocessing.data_preprocessor import DataPreprocessor
 from src.preprocessing.dataset_loader import DatasetLoader
 from src.models.random_forest import RandomForestModel
+from src.models.svm_model import SVMModel
 
 class Main:
 
@@ -117,6 +118,29 @@ class Main:
 
         print("\n=== RESULTADO RANDOM FOREST ===")
         print(rf_metrics)
+
+
+        # TREINAMENTO SVM
+        svm_model = SVMModel()
+
+        svm_model.train(
+            datasets["X_train"],
+            datasets["y_train"]
+        )
+
+        svm_predictions = svm_model.predict(
+            datasets["X_validation"]
+        )
+
+        # Avaliação SVM
+        svm_metrics = evaluator.evaluate(
+            y_true=datasets["y_validation"],
+            y_pred=svm_predictions,
+            model_name="SVM"
+        )
+
+        print("\n=== RESULTADO SVM ===")
+        print(svm_metrics)
 
 
 if __name__ == "__main__":
