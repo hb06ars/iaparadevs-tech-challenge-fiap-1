@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from src.evaluation.feature_importance import FeatureImportanceAnalyzer
 from src.evaluation.model_comparison import ModelComparison
 from src.evaluation.model_evaluator import ModelEvaluator
 from src.exploration.data_exploration import DataExploration
@@ -145,8 +146,6 @@ class Main:
         print("\n=== RESULTADO SVM ===")
         print(svm_metrics)
 
-
-
         # COMPARAÇÃO DE MODELOS
         comparison = ModelComparison(
             output_dir=self.metrics_path
@@ -157,6 +156,23 @@ class Main:
             rf_metrics,
             svm_metrics
         ])
+
+
+
+        # ANÁLISE DE IMPORTÂNCIA DAS CARACTERÍSTICAS
+        feature_analyzer = FeatureImportanceAnalyzer(
+            output_dir=self.graphics_path
+        )
+
+        feature_importance = feature_analyzer.analyze(
+            model=random_forest,
+            feature_names=datasets["X_train"].columns,
+            top_n=15
+        )
+
+
+
+
 
 
 if __name__ == "__main__":
