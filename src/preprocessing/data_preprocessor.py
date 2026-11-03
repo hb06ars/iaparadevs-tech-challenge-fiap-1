@@ -103,6 +103,7 @@ class DataPreprocessor:
 
         self.separate_features_and_target()
         self.split_data()
+        self.validate_split()
         self.show_class_distribution()
 
         print("\nPRÉ-PROCESSAMENTO CONCLUÍDO")
@@ -115,3 +116,25 @@ class DataPreprocessor:
             "y_validation": self.y_validation,
             "y_test": self.y_test
         }
+
+    def validate_split(self):
+
+        print("\n=== VALIDANDO SEPARAÇÃO DOS DADOS ===")
+
+        train_indices = set(self.X_train.index)
+        validation_indices = set(self.X_validation.index)
+        test_indices = set(self.X_test.index)
+
+        assert train_indices.isdisjoint(validation_indices)
+        assert train_indices.isdisjoint(test_indices)
+        assert validation_indices.isdisjoint(test_indices)
+
+        assert (
+                len(train_indices)
+                + len(validation_indices)
+                + len(test_indices)
+                == len(self.df)
+        )
+
+        print("Nenhuma sobreposição entre os conjuntos.")
+        print("Todos os registros foram distribuídos corretamente.")

@@ -181,9 +181,6 @@ class Main:
             X_validation=datasets["X_validation"]
         )
 
-
-
-
         # VALIDAÇÃO CRUZADA
         cross_validator = CrossValidationEvaluator(
             output_dir=self.metrics_path,
@@ -202,10 +199,6 @@ class Main:
             y_train=datasets["y_train"]
         )
 
-
-
-
-
         # ==========================================
         # AVALIAÇÃO FINAL DO MODELO
         # ==========================================
@@ -216,12 +209,12 @@ class Main:
         X_final_train = pd.concat([
             datasets["X_train"],
             datasets["X_validation"]
-        ])
+        ], ignore_index=True)
 
         y_final_train = pd.concat([
             datasets["y_train"],
             datasets["y_validation"]
-        ])
+        ], ignore_index=True)
 
         print(f"Registros para treinamento: {len(X_final_train)}")
         print(f"Registros reservados para teste: {len(datasets['X_test'])}")
