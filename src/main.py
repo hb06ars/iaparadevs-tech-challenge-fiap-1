@@ -1,3 +1,7 @@
+import matplotlib
+
+matplotlib.use("Agg")
+
 from src.pipelines.breast_cancer_pipeline import BreastCancerPipeline
 
 
