@@ -6,6 +6,7 @@ __pycache__/
 # Ambientes virtuais
 venv/
 .venv/
+.venv_validation/
 env/
 ENV/
 
@@ -14,6 +15,10 @@ ENV/
 
 # Arquivos de configuração locais
 *.iml
+
+# Artefatos gerados pelo projeto
+models/*.joblib
+results/
 
 # Distribuição / empacotamento
 build/

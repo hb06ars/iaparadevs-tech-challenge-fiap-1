@@ -394,6 +394,12 @@ Dessa maneira, os arquivos gerados permanecem disponíveis na máquina local ap�
 
 Foram desenvolvidos testes para verificar o carregamento e a utilização do modelo persistido, assim como o funcionamento da classe responsável pelas previsões.
 
+Antes de executar os testes, execute o pipeline principal para gerar o modelo:
+
+```powershell
+python -m src.main
+```
+
 Executar os testes a partir da raiz:
 
 ```powershell
