@@ -19,6 +19,7 @@ from src.persistence.model_serializer import ModelSerializer
 class BreastCancerPipeline:
 
     def __init__(self):
+        """Configura os caminhos de dados e resultados e prepara os componentes do pipeline."""
         self.project_root = Path(__file__).resolve().parents[2]
 
         self.dataset_path = (
@@ -59,6 +60,7 @@ class BreastCancerPipeline:
         self.final_metrics = None
 
     def execute(self):
+        """Executa todas as etapas: dados, análises, modelos, avaliação final e salvamento."""
         print("\n========================================")
         print(" INICIANDO PIPELINE DE CÂNCER DE MAMA")
         print("========================================")
@@ -78,6 +80,7 @@ class BreastCancerPipeline:
         print("========================================")
 
     def load_dataset(self):
+        """Carrega o CSV e exibe uma amostra, as dimensões e a distribuição dos diagnósticos."""
         print("\n=== CARREGANDO DATASET ===")
 
         self.dataframe = self.dataset_loader.load()
@@ -95,6 +98,7 @@ class BreastCancerPipeline:
         self.dataset_loader.show_diagnosis_distribution()
 
     def execute_exploration(self):
+        """Executa a análise exploratória para conhecer a qualidade e os padrões dos dados."""
         print("\n=== ANÁLISE EXPLORATÓRIA ===")
 
         exploration = DataExploration(
@@ -105,6 +109,7 @@ class BreastCancerPipeline:
         exploration.execute()
 
     def prepare_datasets(self):
+        """Separa medidas e diagnóstico e prepara os conjuntos de treino, validação e teste."""
         print("\n=== PRÉ-PROCESSAMENTO ===")
 
         preprocessor = DataPreprocessor(
@@ -119,6 +124,7 @@ class BreastCancerPipeline:
             print(f"{name}: {dataset.shape}")
 
     def train_and_evaluate_models(self):
+        """Treina três classificadores, mede seus resultados e guarda os modelos para outras etapas."""
         print("\n=== TREINAMENTO E AVALIAÇÃO DOS MODELOS ===")
 
         evaluator = ModelEvaluator(
@@ -214,6 +220,7 @@ class BreastCancerPipeline:
         self.compare_models()
 
     def compare_models(self):
+        """Compara as métricas dos modelos avaliados e salva uma tabela com a classificação."""
         print("\n=== COMPARAÇÃO DOS MODELOS ===")
 
         comparison = ModelComparison(
@@ -223,6 +230,7 @@ class BreastCancerPipeline:
         comparison.compare(self.validation_metrics)
 
     def execute_feature_importance(self):
+        """Mostra quais medidas mais influenciaram as decisões do modelo Random Forest."""
         print("\n=== IMPORTÂNCIA DAS CARACTERÍSTICAS ===")
 
         feature_analyzer = FeatureImportanceAnalyzer(
@@ -236,6 +244,7 @@ class BreastCancerPipeline:
         )
 
     def execute_shap_analysis(self):
+        """Gera explicações SHAP sobre a contribuição das medidas para as previsões do Random Forest."""
         print("\n=== ANÁLISE SHAP ===")
 
         shap_analyzer = SHAPAnalyzer(
@@ -248,6 +257,7 @@ class BreastCancerPipeline:
         )
 
     def execute_cross_validation(self):
+        """Avalia os modelos em cinco divisões do conjunto de treino para comparar sua estabilidade."""
         print("\n=== VALIDAÇÃO CRUZADA ===")
 
         cross_validator = CrossValidationEvaluator(
@@ -267,6 +277,7 @@ class BreastCancerPipeline:
         )
 
     def execute_final_evaluation(self):
+        """Treina a regressão logística com treino e validação e mede o resultado no teste separado."""
         print("\n=== PREPARANDO TREINAMENTO FINAL ===")
 
         # Junta treinamento e validação após a seleção do modelo
@@ -320,9 +331,9 @@ class BreastCancerPipeline:
 
 
     def save_final_model(self):
+        """Salva o modelo final treinado para que ele possa ser carregado em futuras previsões."""
         print("\n=== SALVANDO MODELO FINAL ===")
         self.model_serializer.save(
             model=self.final_model.get_model(),
             file_path=self.model_path
         )
-

@@ -16,6 +16,8 @@ A solução contempla análise exploratória dos dados, pré-processamento, trei
 
 O projeto foi estruturado com orientação a objetos, separação de responsabilidades e possibilidade de execução local ou por Docker.
 
+Como atividade complementar da fase, também foi desenvolvida uma etapa experimental de visão computacional para classificação de radiografias de tórax com uma Rede Neural Convolucional (CNN). Essa etapa está documentada em notebook separado e não faz parte da aplicação local/Docker descrita neste README.
+
 ## 2. Objetivos
 
 - Explorar e compreender os dados utilizados no treinamento.
@@ -54,15 +56,23 @@ A coluna `id` é utilizada para identificação dos registros e não participa d
 
 ### Dataset de imagens de pneumonia
 
-O projeto também prevê uma segunda frente de investigação utilizando imagens de radiografias torácicas para classificação de pneumonia.
+Foi desenvolvida uma etapa complementar de investigação utilizando imagens de radiografias torácicas para classificação binária entre `NORMAL` e `PNEUMONIA`.
 
-Dataset previsto:
+Fonte do dataset:
 
 https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia
 
-Essa etapa será desenvolvida separadamente, utilizando técnicas de Deep Learning e Redes Neurais Convolucionais (CNN).
+O conjunto utilizado no experimento possui 5.216 imagens de treinamento, 16 de validação e 624 de teste. Foi treinada uma CNN com TensorFlow/Keras; o conjunto de teste apresentou acurácia de 90,54%, recall de 95,64%, precisão de 89,88% e F1-score de 92,67% para a classe `PNEUMONIA`.
 
-**Status:** etapa de visão computacional em desenvolvimento.
+**Artefatos:** [notebook da CNN](notebooks/pneumonia_cnn.ipynb) e [relatório técnico dos resultados](docs/relatorio_tecnico_cnn_pneumonia.md).
+
+O notebook foi executado no Google Colab e espera encontrar o dataset em `Meu Drive/datasets/chest_xray/`, com as pastas `train`, `val` e `test`, cada uma contendo subpastas `NORMAL` e `PNEUMONIA`. Os resultados da execução são gravados no Google Drive em `pneumonia_cnn_resultados/`; eles não são incluídos no repositório. Para executar, abra o notebook no Colab, disponibilize o dataset nesse caminho e execute as células em ordem.
+
+Esta é uma avaliação acadêmica e experimental: o conjunto de validação é muito pequeno, os resultados não demonstram generalização para outras populações e o modelo não foi integrado ao fluxo da aplicação nem validado para uso clínico. Não deve ser utilizado para diagnóstico ou decisão médica.
+
+O notebook depende das APIs do Google Colab e do TensorFlow/Keras; essa etapa não é executada pelo `src.main`, pelo Docker nem pelas dependências atuais de `requirements.txt`.
+
+**Status:** etapa experimental de visão computacional concluída e documentada.
 
 ## 4. Tecnologias utilizadas
 
@@ -72,6 +82,7 @@ Essa etapa será desenvolvida separadamente, utilizando técnicas de Deep Learni
 | Pandas | Manipulação dos dados |
 | NumPy | Operações numéricas |
 | Scikit-learn | Modelos de Machine Learning |
+| TensorFlow / Keras | Rede Neural Convolucional experimental para imagens |
 | Matplotlib | Visualização dos resultados |
 | Seaborn | Visualização estatística |
 | SHAP | Interpretabilidade dos modelos |
@@ -91,11 +102,15 @@ iaparadevs-tech-challenge-fiap-1/
 │
 ├── docs/
 │   ├── imagens/
+│   │   ├── curvas_treinamento_cnn.png
+│   │   └── matriz_confusao_cnn.png
+│   ├── relatorio_tecnico_cnn_pneumonia.md
 │   └── relatorio_tecnico.md
 │
 ├── models/
 │
 ├── notebooks/
+│   └── pneumonia_cnn.ipynb
 │
 ├── results/
 │   ├── graphics/

@@ -15,10 +15,12 @@ from sklearn.metrics import (
 class ModelEvaluator:
 
     def __init__(self, output_dir):
+        """Define e cria a pasta para salvar os gráficos de avaliação dos modelos."""
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def evaluate(self, y_true, y_pred, model_name):
+        """Calcula métricas comparando os diagnósticos reais com as previsões de um modelo."""
         print(f"\n=== AVALIAÇÃO: {model_name} ===")
 
         accuracy = accuracy_score(y_true, y_pred)
@@ -65,6 +67,7 @@ class ModelEvaluator:
         }
 
     def plot_confusion_matrix(self, y_true, y_pred, model_name):
+        """Salva um gráfico que separa previsões corretas e incorretas por classe."""
         matrix = confusion_matrix(
             y_true,
             y_pred,

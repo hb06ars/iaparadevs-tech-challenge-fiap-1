@@ -6,10 +6,12 @@ import pandas as pd
 class ModelComparison:
 
     def __init__(self, output_dir):
+        """Define e cria a pasta na qual será salvo o arquivo de comparação."""
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def compare(self, model_results):
+        """Ordena os modelos por recall, F1 e acurácia e salva a comparação em CSV."""
         dataframe = pd.DataFrame(model_results)
 
         dataframe = dataframe.sort_values(

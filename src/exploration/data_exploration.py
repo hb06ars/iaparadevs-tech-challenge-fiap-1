@@ -7,6 +7,7 @@ import seaborn as sns
 class DataExploration:
 
     def __init__(self, dataframe, output_dir):
+        """Prepara uma cópia dos dados e identifica diagnóstico, identificador e medidas preditoras."""
         self.df = dataframe.copy()
         self.output_dir = Path(output_dir)
 
@@ -25,6 +26,7 @@ class DataExploration:
         sns.set_theme(style="whitegrid")
 
     def analyze_data_quality(self):
+        """Exibe verificações básicas, como dados ausentes, linhas duplicadas e tipos de coluna."""
         print("\n=== QUALIDADE DOS DADOS ===")
 
         print("\nValores ausentes por coluna:")
@@ -43,6 +45,7 @@ class DataExploration:
         print(self.df.dtypes)
 
     def analyze_statistics(self):
+        """Calcula estatísticas descritivas das medidas e salva os valores em CSV."""
         print("\n=== ANÁLISE ESTATÍSTICA ===")
 
         statistics = self.df[self.feature_columns].describe()
@@ -54,6 +57,7 @@ class DataExploration:
         )
 
     def plot_diagnosis_distribution(self):
+        """Gera um gráfico com a quantidade de casos benignos e malignos."""
         print("\n=== GERANDO GRÁFICO DE DIAGNÓSTICOS ===")
 
         plt.figure(figsize=(8, 5))
@@ -85,6 +89,7 @@ class DataExploration:
         plt.close()
 
     def plot_feature_distributions(self):
+        """Gera histogramas para comparar a distribuição de cada medida entre diagnósticos."""
         print("\n=== GERANDO HISTOGRAMAS DAS CARACTERÍSTICAS ===")
 
         number_of_features = len(self.feature_columns)
@@ -131,6 +136,7 @@ class DataExploration:
         plt.close()
 
     def plot_correlation_matrix(self):
+        """Exibe e salva correlações entre medidas; valores próximos de 1 indicam relação positiva."""
         print("\n=== GERANDO MATRIZ DE CORRELAÇÃO ===")
 
         correlation = self.df[self.feature_columns].corr()
@@ -162,6 +168,7 @@ class DataExploration:
         )
 
     def execute(self):
+        """Executa as verificações, estatísticas e gráficos da análise exploratória."""
         print("\n====================================")
         print("INICIANDO ANÁLISE EXPLORATÓRIA")
         print("====================================")

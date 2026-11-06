@@ -7,10 +7,12 @@ import shap
 class SHAPAnalyzer:
 
     def __init__(self, output_dir):
+        """Define e cria a pasta para salvar os gráficos de explicação do modelo."""
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def analyze(self, model, X_validation):
+        """Estima como cada medida influencia as previsões e salva gráficos SHAP explicativos."""
         print("\n=== INICIANDO ANÁLISE SHAP ===")
 
         # Recupera o classificador Random Forest

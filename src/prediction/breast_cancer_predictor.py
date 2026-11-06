@@ -10,6 +10,7 @@ from src.persistence.model_serializer import ModelSerializer
 class BreastCancerPredictor:
 
     def __init__(self, model_path):
+        """Carrega o modelo treinado e guarda a ordem das medidas que ele espera receber."""
         self.model_path = Path(model_path)
         self.serializer = ModelSerializer()
         self.model = self.serializer.load(self.model_path)
@@ -18,9 +19,7 @@ class BreastCancerPredictor:
         self.feature_names = list(self.model.feature_names_in_)
 
     def validate_input(self, dataframe):
-        """
-        Valida os dados recebidos antes de realizar a previsão.
-        """
+        """Confere formato, colunas e valores; por exemplo, rejeita medidas ausentes ou infinitas."""
 
         if not isinstance(dataframe, pd.DataFrame):
             raise TypeError(
@@ -75,9 +74,7 @@ class BreastCancerPredictor:
         return dataframe
 
     def predict(self, dataframe):
-        """
-        Realiza a classificação de um ou mais registros.
-        """
+        """Classifica um ou mais registros e retorna diagnóstico e probabilidades de cada classe."""
 
         validated_data = self.validate_input(dataframe)
 
@@ -99,9 +96,7 @@ class BreastCancerPredictor:
         return pd.DataFrame(results)
 
     def predict_one(self, features):
-        """
-        Realiza a classificação de um único registro informado como dict.
-        """
+        """Classifica um único registro em formato dicionário e devolve o resultado como dicionário."""
 
         if not isinstance(features, dict):
             raise TypeError(
@@ -114,9 +109,7 @@ class BreastCancerPredictor:
 
     @staticmethod
     def _get_diagnosis(prediction):
-        """
-        Converte o resultado numérico para o diagnóstico correspondente.
-        """
+        """Converte a classe numérica (0 ou 1) para o texto Benigno ou Maligno."""
 
         diagnosis_mapping = {
             0: "Benigno",

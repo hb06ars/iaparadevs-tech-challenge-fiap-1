@@ -9,6 +9,7 @@ from src.preprocessing.dataset_loader import DatasetLoader
 class BreastCancerPredictorTest:
 
     def execute(self):
+        """Exercita a previsão com uma linha do teste e também com um registro em formato dict."""
         project_root = Path(__file__).resolve().parents[1]
 
         dataset_path = (

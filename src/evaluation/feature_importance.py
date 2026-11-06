@@ -8,10 +8,12 @@ import seaborn as sns
 class FeatureImportanceAnalyzer:
 
     def __init__(self, output_dir):
+        """Define e cria a pasta onde serão salvos os resultados da análise."""
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def analyze(self, model, feature_names, top_n=15):
+        """Ordena as medidas pela importância no Random Forest e salva tabela e gráfico."""
         print("\n=== ANÁLISE DE FEATURE IMPORTANCE ===")
 
         # Recupera as importâncias calculadas pelo Random Forest

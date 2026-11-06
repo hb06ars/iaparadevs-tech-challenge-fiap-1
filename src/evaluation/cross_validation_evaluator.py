@@ -6,7 +6,7 @@ from sklearn.model_selection import StratifiedKFold, cross_validate
 class CrossValidationEvaluator:
 
     def __init__(self, output_dir, number_of_folds=5):
-
+        """Define onde salvar resultados e quantas partes usar na validação cruzada."""
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.number_of_folds = number_of_folds
@@ -19,7 +19,7 @@ class CrossValidationEvaluator:
         }
 
     def evaluate(self, models, X_train, y_train):
-
+        """Avalia os modelos em várias divisões do treino; cada parte é validada uma vez."""
         print("\n=== INICIANDO VALIDAÇÃO CRUZADA ===")
 
         cross_validation = StratifiedKFold(

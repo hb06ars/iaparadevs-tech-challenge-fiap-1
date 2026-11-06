@@ -8,6 +8,7 @@ from src.preprocessing.dataset_loader import DatasetLoader
 class ModelLoadingTest:
 
     def execute(self):
+        """Confirma que o modelo salvo pode ser carregado e usado para prever casos de teste."""
         project_root = Path(__file__).resolve().parents[1]
 
         dataset_path = (

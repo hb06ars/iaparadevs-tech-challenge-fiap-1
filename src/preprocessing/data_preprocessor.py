@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 class DataPreprocessor:
 
     def __init__(self, dataframe):
+        """Guarda uma cópia dos dados e prepara os campos para separar entradas e respostas."""
         self.df = dataframe.copy()
 
         self.target_column = "diagnosis"
@@ -18,6 +19,7 @@ class DataPreprocessor:
         self.y_test = None
 
     def separate_features_and_target(self):
+        """Separa as medidas usadas como entrada (X) do diagnóstico que queremos prever (y)."""
 
         print("\n=== SEPARANDO FEATURES E TARGET ===")
 
@@ -44,6 +46,7 @@ class DataPreprocessor:
         print(self.y.value_counts().sort_index())
 
     def split_data(self):
+        """Divide os dados em treino, validação e teste; estratificar mantém as proporções das classes."""
 
         print("\n=== DIVIDINDO OS DADOS ===")
 
@@ -73,6 +76,7 @@ class DataPreprocessor:
         print(f"Teste: {len(self.X_test)} registros")
 
     def show_class_distribution(self):
+        """Exibe a porcentagem de diagnósticos benignos e malignos em cada divisão dos dados."""
 
         print("\n=== DISTRIBUIÇÃO DAS CLASSES ===")
 
@@ -92,6 +96,7 @@ class DataPreprocessor:
             print(distribution.round(2))
 
     def execute(self):
+        """Executa totalmente o pré-processamento e devolve os conjuntos prontos para treinar e avaliar."""
 
         print("\n====================================")
         print("INICIANDO PRÉ-PROCESSAMENTO")
@@ -114,6 +119,7 @@ class DataPreprocessor:
         }
 
     def validate_split(self):
+        """Confere que treino, validação e teste não compartilham registros e cobrem todos os dados."""
 
         print("\n=== VALIDANDO SEPARAÇÃO DOS DADOS ===")
 

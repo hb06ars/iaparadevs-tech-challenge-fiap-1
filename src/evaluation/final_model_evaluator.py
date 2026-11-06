@@ -16,6 +16,7 @@ from sklearn.metrics import (
 class FinalModelEvaluator:
 
     def __init__(self, metrics_dir, graphics_dir):
+        """Configura as pastas para salvar as métricas finais e a matriz de confusão."""
         self.metrics_dir = Path(metrics_dir)
         self.graphics_dir = Path(graphics_dir)
 
@@ -23,6 +24,7 @@ class FinalModelEvaluator:
         self.graphics_dir.mkdir(parents=True, exist_ok=True)
 
     def evaluate(self, y_true, y_pred):
+        """Compara previsões com diagnósticos reais, calcula métricas e gera os resultados finais."""
         print("\n=== AVALIAÇÃO FINAL NO CONJUNTO DE TESTE ===")
 
         accuracy = accuracy_score(y_true, y_pred)
@@ -68,6 +70,7 @@ class FinalModelEvaluator:
         return metrics
 
     def save_metrics(self, metrics):
+        """Grava as métricas finais em CSV para consulta fora da execução do programa."""
         dataframe = pd.DataFrame([metrics])
 
         output_file = (
@@ -79,6 +82,7 @@ class FinalModelEvaluator:
         print(f"\nMétricas salvas em: {output_file}")
 
     def plot_confusion_matrix(self, y_true, y_pred):
+        """Gera um gráfico que mostra acertos e erros para cada diagnóstico."""
         matrix = confusion_matrix(
             y_true,
             y_pred,
