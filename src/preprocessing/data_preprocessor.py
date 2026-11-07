@@ -39,8 +39,8 @@ class DataPreprocessor:
 
         self.y = self.df[self.target_column]
 
-        print(f"Quantidade de features: {self.X.shape[1]}")
-        print(f"Quantidade de registros: {self.X.shape[0]}")
+        print(f"Quantidade de features (colunas exceto id e diagnosis): {self.X.shape[1]}")
+        print(f"Quantidade de registros (linhas exceto o cabeçalho): {self.X.shape[0]}")
 
         print("\nDistribuição do target:")
         print(self.y.value_counts().sort_index())
@@ -81,9 +81,9 @@ class DataPreprocessor:
         print("\n=== DISTRIBUIÇÃO DAS CLASSES ===")
 
         datasets = {
-            "Treinamento": self.y_train,
-            "Validação": self.y_validation,
-            "Teste": self.y_test
+            "Treinamento (%)": self.y_train,
+            "Validação (%)": self.y_validation,
+            "Teste (%)": self.y_test
         }
 
         for name, target in datasets.items():

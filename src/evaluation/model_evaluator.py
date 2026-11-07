@@ -21,7 +21,6 @@ class ModelEvaluator:
 
     def evaluate(self, y_true, y_pred, model_name):
         """Calcula métricas comparando os diagnósticos reais com as previsões de um modelo."""
-        print(f"\n=== AVALIAÇÃO: {model_name} ===")
 
         accuracy = accuracy_score(y_true, y_pred)
 
@@ -37,20 +36,15 @@ class ModelEvaluator:
             y_true, y_pred, pos_label=1
         )
 
-        print(f"Accuracy:  {accuracy:.4f}")
-        print(f"Precision: {precision:.4f}")
-        print(f"Recall:    {recall:.4f}")
-        print(f"F1-score:  {f1:.4f}")
-
         print("\n=== RELATÓRIO DE CLASSIFICAÇÃO ===")
 
-        print(classification_report(
+        classification_report(
             y_true,
             y_pred,
             labels=[0, 1],
             target_names=["Benigno", "Maligno"],
             zero_division=0
-        ))
+        )
 
         self.plot_confusion_matrix(
             y_true,

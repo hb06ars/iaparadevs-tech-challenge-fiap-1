@@ -28,25 +28,30 @@ class DataExploration:
     def analyze_data_quality(self):
         """Exibe verificações básicas, como dados ausentes, linhas duplicadas e tipos de coluna."""
         print("\n=== QUALIDADE DOS DADOS ===")
+        valores_ausentes_por_coluna = self.df.isnull().sum()
+        total_valores_ausentes = valores_ausentes_por_coluna.sum()
+        quantidade_registros_duplicados = self.df.duplicated().sum()
+        quantidade_ids_duplicados = self.df[self.id_column].duplicated().sum()
 
-        print("\nValores ausentes por coluna:")
-        print(self.df.isnull().sum())
+        if valores_ausentes_por_coluna.sum() > 0 or quantidade_registros_duplicados > 0 or quantidade_ids_duplicados > 0:
+            print("ATENÇÃO: Foram encontrados problemas de qualidade nos dados!")
+            print("\nValores ausentes por coluna:")
+            print(valores_ausentes_por_coluna)
 
-        print("\nTotal de valores ausentes:")
-        print(self.df.isnull().sum().sum())
+            print("\nTotal de valores ausentes:")
+            print(total_valores_ausentes)
 
-        print("\nQuantidade de registros duplicados:")
-        print(self.df.duplicated().sum())
+            print("\nQuantidade de registros duplicados:")
+            print(quantidade_registros_duplicados)
 
-        print("\nQuantidade de IDs duplicados:")
-        print(self.df[self.id_column].duplicated().sum())
-
-        print("\nTipos de dados:")
-        print(self.df.dtypes)
+            print("\nQuantidade de IDs duplicados:")
+            print(quantidade_ids_duplicados)
+        else:
+            print("Nenhum problema de qualidade encontrado nos dados.")
 
     def analyze_statistics(self):
         """Calcula estatísticas descritivas das medidas e salva os valores em CSV."""
-        print("\n=== ANÁLISE ESTATÍSTICA ===")
+        print("\n=== ANÁLISE ESTATÍSTICA DE COLUNAS (MÉDIA, MEDIANA, DESVIO PADRÃO...) ===")
 
         statistics = self.df[self.feature_columns].describe()
 
@@ -58,7 +63,8 @@ class DataExploration:
 
     def plot_diagnosis_distribution(self):
         """Gera um gráfico com a quantidade de casos benignos e malignos."""
-        print("\n=== GERANDO GRÁFICO DE DIAGNÓSTICOS ===")
+        print("\n=== GERANDO GRÁFICO DE DIAGNÓSTICOS (TARGET) - (MALIGNO X BENIGNO) ===")
+        print("Arquivo gerado: distribuicao_diagnosticos.png")
 
         plt.figure(figsize=(8, 5))
 
@@ -91,6 +97,8 @@ class DataExploration:
     def plot_feature_distributions(self):
         """Gera histogramas para comparar a distribuição de cada medida entre diagnósticos."""
         print("\n=== GERANDO HISTOGRAMAS DAS CARACTERÍSTICAS ===")
+        print("Histogramas para cada coluna, mostrando a frequência entre os diagnósticos Maligno (M) e Benigno (B).")
+        print("Arquivo gerado: distribuicao_caracteristicas.png")
 
         number_of_features = len(self.feature_columns)
 
@@ -136,8 +144,13 @@ class DataExploration:
         plt.close()
 
     def plot_correlation_matrix(self):
-        """Exibe e salva correlações entre medidas; valores próximos de 1 indicam relação positiva."""
+        """Exibe e salva correlações entre medidas; valores próximos de 1 indicam relação positiva.
+        Importante para identificar quais medidas estão mais relacionadas entre si e com o diagnóstico.
+        """
         print("\n=== GERANDO MATRIZ DE CORRELAÇÃO ===")
+        print("O quanto uma variável está relacionada a outra, o quanto um aumento no valor de uma variável "
+              "resulta em um aumento ou diminuição no valor da outra.")
+        print("Arquivo gerado: matriz_correlacao.png")
 
         correlation = self.df[self.feature_columns].corr()
 
@@ -175,7 +188,6 @@ class DataExploration:
 
         self.analyze_data_quality()
         self.analyze_statistics()
-
         self.plot_diagnosis_distribution()
         self.plot_feature_distributions()
         self.plot_correlation_matrix()

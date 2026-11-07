@@ -14,6 +14,7 @@ class SHAPAnalyzer:
     def analyze(self, model, X_validation):
         """Estima como cada medida influencia as previsões e salva gráficos SHAP explicativos."""
         print("\n=== INICIANDO ANÁLISE SHAP ===")
+        print("Quais variáveis \"empurraram\" a previsão para Maligno ou para Benigno.")
 
         # Recupera o classificador Random Forest
         classifier = model.get_model()

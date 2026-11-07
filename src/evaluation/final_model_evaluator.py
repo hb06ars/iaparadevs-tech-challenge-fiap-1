@@ -54,7 +54,7 @@ class FinalModelEvaluator:
         print(f"Recall:    {recall:.4f}")
         print(f"F1-score:  {f1:.4f}")
 
-        print("\n=== RELATÓRIO DE CLASSIFICAÇÃO ===")
+        print("\n=== RELATÓRIO DE CLASSIFICAÇÃO FINAL ===")
 
         print(classification_report(
             y_true,

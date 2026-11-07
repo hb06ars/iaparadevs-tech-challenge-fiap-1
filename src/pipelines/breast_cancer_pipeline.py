@@ -12,9 +12,10 @@ from src.exploration.data_exploration import DataExploration
 from src.models.logistic_regression import LogisticRegressionModel
 from src.models.random_forest import RandomForestModel
 from src.models.svm_model import SVMModel
+from src.persistence.model_serializer import ModelSerializer
 from src.preprocessing.data_preprocessor import DataPreprocessor
 from src.preprocessing.dataset_loader import DatasetLoader
-from src.persistence.model_serializer import ModelSerializer
+
 
 class BreastCancerPipeline:
 
@@ -84,23 +85,22 @@ class BreastCancerPipeline:
         print("\n=== CARREGANDO DATASET ===")
 
         self.dataframe = self.dataset_loader.load()
+        print("Dataset carregado com sucesso!")
 
-        print("\n=== DIMENSÕES ===")
+        print("\n=== DIMENSÕES (Linhas sem Cabeçalho X Colunas) ===")
         print(self.dataframe.shape)
 
-        print("\n=== PRIMEIROS REGISTROS ===")
+        print("\n=== AMOSTRA COM PRIMEIROS 5 REGISTROS ===")
         self.dataset_loader.show_preview()
 
-        print("\n=== INFORMAÇÕES ===")
+        print("\n=== INFORMAÇÕES - NOME DA COLUNA, TIPAGEM... ===")
         self.dataset_loader.show_info()
 
-        print("\n=== DISTRIBUIÇÃO DOS DIAGNÓSTICOS ===")
+        print("\n=== DISTRIBUIÇÃO DOS DIAGNÓSTICOS (VARIÁVEL ALVO) ===")
         self.dataset_loader.show_diagnosis_distribution()
 
     def execute_exploration(self):
         """Executa a análise exploratória para conhecer a qualidade e os padrões dos dados."""
-        print("\n=== ANÁLISE EXPLORATÓRIA ===")
-
         exploration = DataExploration(
             dataframe=self.dataframe,
             output_dir=self.graphics_path
@@ -131,7 +131,9 @@ class BreastCancerPipeline:
             output_dir=self.graphics_path
         )
 
+        # --------------------------
         # Regressão Logística
+        # --------------------------
         logistic_model = LogisticRegressionModel()
 
         logistic_model.train(
@@ -143,16 +145,6 @@ class BreastCancerPipeline:
             self.datasets["X_validation"]
         )
 
-        print("\n=== PRIMEIRAS PREVISÕES ===")
-        print(predictions[:10])
-
-        print("\n=== DISTRIBUIÇÃO DAS PREVISÕES ===")
-        print(
-            pd.Series(predictions)
-            .value_counts()
-            .sort_index()
-        )
-
         logistic_metrics = evaluator.evaluate(
             y_true=self.datasets["y_validation"],
             y_pred=predictions,
@@ -162,7 +154,9 @@ class BreastCancerPipeline:
         print("\n=== RESULTADO REGRESSÃO LOGÍSTICA ===")
         print(logistic_metrics)
 
+        # --------------------------
         # Random Forest
+        # --------------------------
         random_forest = RandomForestModel()
 
         random_forest.train(
@@ -183,7 +177,9 @@ class BreastCancerPipeline:
         print("\n=== RESULTADO RANDOM FOREST ===")
         print(rf_metrics)
 
+        # --------------------------
         # SVM
+        # --------------------------
         svm_model = SVMModel()
 
         svm_model.train(
@@ -204,7 +200,9 @@ class BreastCancerPipeline:
         print("\n=== RESULTADO SVM ===")
         print(svm_metrics)
 
+        # --------------------------
         # Armazena os modelos para utilização nas próximas etapas
+        # --------------------------
         self.models = {
             "Regressao Logistica": logistic_model,
             "Random Forest": random_forest,
@@ -221,7 +219,6 @@ class BreastCancerPipeline:
 
     def compare_models(self):
         """Compara as métricas dos modelos avaliados e salva uma tabela com a classificação."""
-        print("\n=== COMPARAÇÃO DOS MODELOS ===")
 
         comparison = ModelComparison(
             output_dir=self.metrics_path
@@ -328,7 +325,6 @@ class BreastCancerPipeline:
 
         print("\n=== RESULTADO FINAL ===")
         print(self.final_metrics)
-
 
     def save_final_model(self):
         """Salva o modelo final treinado para que ele possa ser carregado em futuras previsões."""

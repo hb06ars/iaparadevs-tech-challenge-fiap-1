@@ -4,7 +4,6 @@
 [![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
 [![Scikit-learn](https://img.shields.io/badge/Scikit--learn-ML-orange.svg)](https://scikit-learn.org/)
 [![Docker](https://img.shields.io/badge/Docker-Containerization-blue.svg)](https://www.docker.com/)
-[![Status](https://img.shields.io/badge/Status-Em%20desenvolvimento-yellow.svg)]()
 
 ## 1. Sobre o projeto
 
@@ -311,7 +310,7 @@ Essa funcionalidade demonstra a possibilidade de reutilização do modelo sem a 
 ### Clonar o repositório
 
 ```bash
-git clone <URL_DO_REPOSITORIO>
+git clone https://github.com/hb06ars/iaparadevs-tech-challenge-fiap-1.git
 ```
 
 Acesse a pasta:

@@ -21,6 +21,8 @@ class CrossValidationEvaluator:
     def evaluate(self, models, X_train, y_train):
         """Avalia os modelos em várias divisões do treino; cada parte é validada uma vez."""
         print("\n=== INICIANDO VALIDAÇÃO CRUZADA ===")
+        print("Divide o conjunto de treino em partes, treina e valida cada modelo em cada parte.")
+        print("O modelo é realmente bom ou teve sorte com a divisão do treino?")
 
         cross_validation = StratifiedKFold(
             n_splits=self.number_of_folds,
