@@ -123,6 +123,9 @@ iaparadevs-tech-challenge-fiap-1/
 │   ├── pipelines/
 │   ├── prediction/
 │   ├── preprocessing/
+│   ├── web/
+│   │   └── index.html
+│   ├── api.py
 │   └── main.py
 │
 ├── tests/
@@ -130,6 +133,7 @@ iaparadevs-tech-challenge-fiap-1/
 ├── .dockerignore
 ├── Dockerfile
 ├── requirements.txt
+├── requirements-api.txt
 └── README.md
 ```
 
@@ -359,6 +363,24 @@ Na raiz do projeto:
 python -m src.main
 ```
 
+### Iniciar a aplicação web de demonstração
+
+Depois de executar o pipeline e gerar o modelo, instale as dependências da API:
+
+```powershell
+pip install -r requirements-api.txt
+```
+
+Inicie o servidor local:
+
+```powershell
+python -m uvicorn src.api:app --reload
+```
+
+Acesse `http://127.0.0.1:8000` para enviar um arquivo `.csv`. A API também disponibiliza a documentação interativa em `http://127.0.0.1:8000/docs` e um CSV de exemplo na própria página. O arquivo deve usar vírgulas para separar colunas e pontos para separar casas decimais. Ele deve ter uma linha de cabeçalho com as 30 características numéricas do modelo; as colunas `id` e `diagnosis` podem ser incluídas e serão ignoradas.
+
+Esta interface é uma demonstração acadêmica: as classificações e probabilidades são experimentais, não constituem diagnóstico e não devem ser usadas para decisões clínicas.
+
 ## 13. Como executar utilizando Docker
 
 ### Pré-requisitos
@@ -388,6 +410,18 @@ docker run --rm `
 O dataset é disponibilizado ao container por meio de volume, assim como os diretórios de resultados e modelos.
 
 Dessa maneira, os arquivos gerados permanecem disponíveis na máquina local após a execução.
+
+Após essa execução concluir e salvar o modelo em `models/`, inicie a interface web com:
+
+```powershell
+docker run --rm -p 8000:8000 `
+  -v "${PWD}/models:/app/models" `
+  -v "${PWD}/data/breast_cancer:/app/data/breast_cancer" `
+  --entrypoint python `
+  fiap-breast-cancer -m uvicorn src.api:app --host 0.0.0.0 --port 8000
+```
+
+Acesse `http://127.0.0.1:8000`. A montagem dos volumes disponibiliza o modelo treinado e o dataset usado para gerar a planilha de exemplo.
 
 ## 14. Testes
 

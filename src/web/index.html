@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5f2">
+  <title>Clareza | Análise experimental</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #282520;
+      --muted: #77746e;
+      --paper: #fffefa;
+      --canvas: #f7f5f2;
+      --line: #e9e5de;
+      --plum: #724e65;
+      --plum-dark: #54394b;
+      --rose: #bd6c7d;
+      --rose-pale: #f8ecef;
+      --green: #45816d;
+      --green-pale: #eaf3ef;
+      --shadow: 0 18px 48px rgba(48, 37, 42, .07);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font: 15px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .topbar {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 max(6vw, 24px);
+      border-bottom: 1px solid rgba(80, 68, 66, .08);
+      background: rgba(255, 254, 250, .88);
+    }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 750; letter-spacing: -.03em; }
+    .brand-mark {
+      width: 34px; height: 34px; display: grid; place-items: center; border-radius: 12px;
+      color: white; background: var(--plum); font-size: 19px;
+    }
+    .top-note { color: var(--muted); font-size: 13px; }
+    main { width: min(1050px, calc(100% - 40px)); margin: 55px auto 80px; }
+    .intro { max-width: 700px; margin: 0 auto 34px; text-align: center; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px;
+      border: 1px solid #e8dfe4; border-radius: 999px; background: #fbf7f8;
+      color: var(--plum); font-size: 12px; font-weight: 700; letter-spacing: .045em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--rose); }
+    h1 { margin: 17px 0 10px; font-size: clamp(32px, 5vw, 49px); line-height: 1.08; letter-spacing: -.055em; }
+    .intro p { max-width: 590px; margin: 0 auto; color: var(--muted); font-size: 16px; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) 295px; gap: 20px; align-items: start; }
+    .card { border: 1px solid var(--line); border-radius: 20px; background: var(--paper); box-shadow: var(--shadow); }
+    .upload-card { padding: 26px; }
+    .card-title { margin: 0; font-size: 18px; letter-spacing: -.025em; }
+    .card-subtitle { margin: 4px 0 20px; color: var(--muted); font-size: 13px; }
+    .dropzone {
+      min-height: 218px; padding: 28px 20px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      border: 1.5px dashed #d9cbd3; border-radius: 16px; background: #fcf9fa;
+      transition: border-color .2s, background .2s;
+    }
+    .dropzone.dragging { border-color: var(--plum); background: #f7eff3; }
+    .upload-icon { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 15px; background: var(--rose-pale); color: var(--plum); }
+    .upload-icon svg { width: 23px; height: 23px; }
+    .dropzone strong { margin-top: 12px; font-size: 15px; }
+    .dropzone p { margin: 3px 0 14px; color: var(--muted); font-size: 13px; }
+    .button {
+      min-height: 42px; display: inline-flex; align-items: center; justify-content: center;
+      padding: 0 17px; border: 0; border-radius: 11px; cursor: pointer;
+      font-size: 13px; font-weight: 700; text-decoration: none; transition: .2s;
+    }
+    .button-primary { background: var(--plum); color: white; }
+    .button-primary:hover { background: var(--plum-dark); transform: translateY(-1px); }
+    .button-secondary { border: 1px solid var(--line); background: white; color: var(--ink); }
+    .button-secondary:hover { border-color: #cbb8c3; }
+    .file-input { display: none; }
+    .file-selected { display: none; align-items: center; gap: 10px; margin-top: 14px; padding: 11px 13px; border-radius: 11px; background: #f6f3f0; font-size: 13px; }
+    .file-selected.visible { display: flex; }
+    .file-selected span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .remove-file { margin-left: auto; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 18px; }
+    .actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 16px; }
+    .actions .button { flex: 1; }
+    .status { display: none; margin-top: 16px; padding: 12px 14px; border-radius: 11px; font-size: 13px; }
+    .status.visible { display: block; }
+    .status.error { background: #fbefef; color: #983d48; }
+    .status.loading { background: #f4eff3; color: var(--plum); }
+    .privacy { display: flex; gap: 9px; margin: 18px 2px 0; color: var(--muted); font-size: 12px; }
+    .privacy svg { width: 16px; height: 16px; flex: 0 0 16px; color: var(--green); }
+    .info-card { padding: 22px; }
+    .info-card h2 { margin: 0 0 14px; font-size: 15px; }
+    .step { display: grid; grid-template-columns: 27px 1fr; gap: 11px; margin: 14px 0; }
+    .step-number { width: 27px; height: 27px; display: grid; place-items: center; border-radius: 9px; background: #f3edf1; color: var(--plum); font-size: 12px; font-weight: 750; }
+    .step strong { display: block; font-size: 13px; }
+    .step span:last-child { color: var(--muted); font-size: 12px; }
+    .disclaimer { margin-top: 18px; padding: 13px; border: 1px solid #f0dfc8; border-radius: 12px; background: #fff9ef; color: #765d37; font-size: 12px; }
+    .disclaimer strong { display: block; margin-bottom: 4px; color: #684e29; }
+    .results { display: none; margin-top: 22px; }
+    .results.visible { display: block; }
+    .results-header { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin: 0 2px 13px; }
+    .results-header h2 { margin: 0; font-size: 21px; letter-spacing: -.035em; }
+    .results-header span { color: var(--muted); font-size: 12px; }
+    .sort-control { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
+    .sort-control select { min-height: 36px; padding: 0 30px 0 10px; border: 1px solid var(--line); border-radius: 9px; background: var(--paper); color: var(--ink); font: inherit; cursor: pointer; }
+    .summary { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 12px; margin-bottom: 13px; }
+    .summary-card { min-height: 110px; padding: 17px; display: flex; align-items: center; gap: 15px; }
+    .summary-card small { display: block; color: var(--muted); font-size: 12px; }
+    .summary-card strong { display: block; margin-top: 3px; font-size: 26px; line-height: 1.1; letter-spacing: -.04em; }
+    .summary-card.benign strong { color: var(--green); }
+    .summary-card.malignant strong { color: var(--rose); }
+    .donut { width: 60px; height: 60px; flex: 0 0 60px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--green) 0deg, var(--rose) 0deg); }
+    .donut::after { content: ""; width: 42px; height: 42px; border-radius: 50%; background: var(--paper); }
+    .table-card { overflow: hidden; }
+    .table-wrap { max-height: 430px; overflow: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    th { position: sticky; top: 0; z-index: 1; padding: 12px 15px; background: #fbf9f6; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+    td { padding: 13px 15px; border-top: 1px solid #f0ede8; }
+    .badge { display: inline-block; padding: 4px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+    .badge.benign { background: var(--green-pale); color: #33735d; }
+    .badge.malignant { background: var(--rose-pale); color: #a74d61; }
+    .probability { min-width: 105px; }
+    .prob-label { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 5px; font-size: 11px; }
+    .prob-label span:last-child { color: var(--muted); }
+    .bar { height: 5px; overflow: hidden; border-radius: 99px; background: #eeeae5; }
+    .bar > span { display: block; height: 100%; border-radius: inherit; background: var(--rose); }
+    .results-note { margin: 10px 3px 0; color: var(--muted); font-size: 11px; }
+    footer { padding: 0 20px 30px; text-align: center; color: #918c84; font-size: 11px; }
+    @media (max-width: 760px) {
+      main { margin-top: 37px; }
+      .layout { grid-template-columns: 1fr; }
+      .info-card { order: 2; }
+      .summary { grid-template-columns: 1fr 1fr; }
+      .summary-card:first-child { grid-column: 1 / -1; min-height: 90px; }
+      .top-note { display: none; }
+    }
+    @media (max-width: 480px) {
+      main { width: calc(100% - 26px); }
+      .topbar { height: 62px; padding: 0 16px; }
+      .upload-card { padding: 18px; }
+      .actions { flex-direction: column; }
+      .summary-card { padding: 13px; gap: 10px; }
+      .summary-card strong { font-size: 23px; }
+      th, td { padding: 11px 9px; }
+      .probability { min-width: 83px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">✳</span> clareza</div>
+    <span class="top-note">Projeto acadêmico · FIAP Tech Challenge</span>
+  </header>
+  <main>
+    <section class="intro">
+      <span class="eyebrow">Demonstração experimental</span>
+      <h1>Uma leitura mais clara dos dados.</h1>
+      <p>Envie medidas de exames em uma planilha e visualize a classificação estimada pelo modelo de forma simples.</p>
+    </section>
+
+    <div class="layout">
+      <section class="card upload-card" aria-labelledby="upload-title">
+        <h2 class="card-title" id="upload-title">Analisar planilha</h2>
+        <p class="card-subtitle">A planilha deve conter as 30 características numéricas do modelo.</p>
+        <div class="dropzone" id="dropzone">
+          <div class="upload-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M4.5 14.5v4A1.5 1.5 0 0 0 6 20h12a1.5 1.5 0 0 0 1.5-1.5v-4"/></svg>
+          </div>
+          <strong id="drop-title">Arraste seu arquivo para cá</strong>
+          <p>ou selecione um arquivo .csv (vírgula entre colunas, ponto nos decimais; até 5 MB)</p>
+          <button class="button button-secondary" id="choose-file" type="button">Selecionar planilha</button>
+          <input class="file-input" id="file-input" type="file" accept=".csv,text/csv">
+        </div>
+        <div class="file-selected" id="file-selected"><span id="file-name"></span><button class="remove-file" id="remove-file" type="button" aria-label="Remover arquivo">×</button></div>
+        <div class="actions">
+          <a class="button button-secondary" href="/api/template">Baixar planilha de exemplo</a>
+          <button class="button button-primary" id="analyze" type="button" disabled>Analisar dados</button>
+        </div>
+        <div class="status" id="status" role="status" aria-live="polite"></div>
+        <div class="privacy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></svg>
+          <span>O arquivo é processado localmente pela aplicação e não é armazenado.</span>
+        </div>
+      </section>
+
+      <aside class="card info-card">
+        <h2>Como funciona</h2>
+        <div class="step"><span class="step-number">1</span><div><strong>Prepare a planilha</strong><span>Use as 30 colunas numéricas. Baixe o exemplo para ver o formato.</span></div></div>
+        <div class="step"><span class="step-number">2</span><div><strong>Envie os dados</strong><span>Cada linha representa um registro a ser analisado.</span></div></div>
+        <div class="step"><span class="step-number">3</span><div><strong>Veja as estimativas</strong><span>Consulte a classe prevista e as probabilidades calculadas.</span></div></div>
+        <div class="disclaimer">
+          <strong>Importante: uso exclusivamente acadêmico</strong>
+          Esta demonstração não realiza diagnóstico, não substitui avaliação profissional e não deve orientar decisões de saúde. As probabilidades são estimativas do modelo, não certezas clínicas.
+        </div>
+      </aside>
+    </div>
+
+    <section class="results" id="results" aria-labelledby="results-title">
+      <div class="results-header">
+        <div><h2 id="results-title">Resumo da análise</h2><span id="total-label"></span></div>
+        <label class="sort-control" for="classification-sort">Ordenar
+          <select id="classification-sort">
+            <option value="benign">Benignos primeiro</option>
+            <option value="malignant">Malignos primeiro</option>
+            <option value="uncertain">Mais incertos primeiro</option>
+            <option value="original">Ordem da planilha</option>
+          </select>
+        </label>
+      </div>
+      <div class="summary">
+        <article class="card summary-card"><div class="donut" id="donut" aria-hidden="true"></div><div><small>Registros analisados</small><strong id="total-count">0</strong></div></article>
+        <article class="card summary-card benign"><div><small>Classe estimada: benigno</small><strong id="benign-count">0</strong></div></article>
+        <article class="card summary-card malignant"><div><small>Classe estimada: maligno</small><strong id="malignant-count">0</strong></div></article>
+      </div>
+      <div class="card table-card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Registro</th><th>Classificação estimada</th><th>Prob. benigno</th><th>Prob. maligno</th></tr></thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <p class="results-note">Valores representam probabilidades estimadas pelo modelo experimental e não são uma medida de certeza diagnóstica.</p>
+    </section>
+  </main>
+  <footer>Clareza · Classificador experimental de tumores de mama · FIAP Tech Challenge</footer>
+
+  <script>
+    const fileInput = document.getElementById("file-input");
+    const dropzone = document.getElementById("dropzone");
+    const fileSelected = document.getElementById("file-selected");
+    const fileName = document.getElementById("file-name");
+    const analyzeButton = document.getElementById("analyze");
+    const statusBox = document.getElementById("status");
+    const resultsSection = document.getElementById("results");
+    const resultsBody = document.getElementById("results-body");
+    const classificationSort = document.getElementById("classification-sort");
+    let selectedFile = null;
+    let currentResults = [];
+
+    function showStatus(message, type) {
+      statusBox.textContent = message;
+      statusBox.className = `status visible ${type}`;
+    }
+
+    function selectFile(file) {
+      if (!file) return;
+      if (!file.name.toLowerCase().endsWith(".csv")) {
+        selectedFile = null;
+        fileSelected.classList.remove("visible");
+        analyzeButton.disabled = true;
+        showStatus("Selecione um arquivo CSV no formato .csv.", "error");
+        return;
+      }
+      selectedFile = file;
+      fileName.textContent = file.name;
+      fileSelected.classList.add("visible");
+      analyzeButton.disabled = false;
+      statusBox.className = "status";
+      resultsSection.classList.remove("visible");
+    }
+
+    document.getElementById("choose-file").addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", () => selectFile(fileInput.files[0]));
+    document.getElementById("remove-file").addEventListener("click", () => {
+      selectedFile = null;
+      fileInput.value = "";
+      fileSelected.classList.remove("visible");
+      analyzeButton.disabled = true;
+    });
+
+    for (const eventName of ["dragenter", "dragover"]) {
+      dropzone.addEventListener(eventName, event => {
+        event.preventDefault();
+        dropzone.classList.add("dragging");
+      });
+    }
+    for (const eventName of ["dragleave", "drop"]) {
+      dropzone.addEventListener(eventName, event => {
+        event.preventDefault();
+        dropzone.classList.remove("dragging");
+      });
+    }
+    dropzone.addEventListener("drop", event => selectFile(event.dataTransfer.files[0]));
+
+    function addProbabilityCell(row, value, label) {
+      const cell = document.createElement("td");
+      cell.className = "probability";
+      const percent = Math.max(0, Math.min(100, value * 100));
+      const top = document.createElement("div");
+      top.className = "prob-label";
+      const name = document.createElement("span");
+      name.textContent = label;
+      const amount = document.createElement("span");
+      amount.textContent = `${percent.toFixed(1)}%`;
+      top.append(name, amount);
+      const bar = document.createElement("div");
+      bar.className = "bar";
+      const fill = document.createElement("span");
+      fill.style.width = `${percent}%`;
+      bar.append(fill);
+      cell.append(top, bar);
+      row.append(cell);
+    }
+
+    function renderResultRows() {
+      const sortedResults = currentResults
+        .map((result, index) => ({ result, index }))
+        .sort((left, right) => {
+          const direction = classificationSort.value;
+          if (direction === "original") return left.index - right.index;
+          if (direction === "uncertain") {
+            const leftGap = Math.abs(
+              left.result.probability_benign - left.result.probability_malignant
+            );
+            const rightGap = Math.abs(
+              right.result.probability_benign - right.result.probability_malignant
+            );
+            return leftGap - rightGap || left.index - right.index;
+          }
+          const firstRank = left.result.diagnosis === "Benigno" ? 0 : 1;
+          const secondRank = right.result.diagnosis === "Benigno" ? 0 : 1;
+          const rankDifference = direction === "benign"
+            ? firstRank - secondRank
+            : secondRank - firstRank;
+          return rankDifference || left.index - right.index;
+        });
+
+      resultsBody.replaceChildren();
+      for (const { result } of sortedResults) {
+        const row = document.createElement("tr");
+        const id = document.createElement("td");
+        id.textContent = result.row;
+        const diagnosis = document.createElement("td");
+        const badge = document.createElement("span");
+        badge.className = `badge ${result.diagnosis === "Benigno" ? "benign" : "malignant"}`;
+        badge.textContent = result.diagnosis;
+        diagnosis.append(badge);
+        row.append(id, diagnosis);
+        addProbabilityCell(row, result.probability_benign, "Benigno");
+        addProbabilityCell(row, result.probability_malignant, "Maligno");
+        resultsBody.append(row);
+      }
+    }
+
+    classificationSort.addEventListener("change", renderResultRows);
+
+    function renderResults(data) {
+      document.getElementById("total-count").textContent = data.total;
+      document.getElementById("benign-count").textContent = data.summary.benign;
+      document.getElementById("malignant-count").textContent = data.summary.malignant;
+      document.getElementById("total-label").textContent = `${data.total} ${data.total === 1 ? "registro" : "registros"}`;
+      const benignPercent = data.total ? (data.summary.benign / data.total) * 100 : 0;
+      document.getElementById("donut").style.background =
+        `conic-gradient(var(--green) 0 ${benignPercent}%, var(--rose) ${benignPercent}% 100%)`;
+      currentResults = data.results;
+      renderResultRows();
+      resultsSection.classList.add("visible");
+      resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    analyzeButton.addEventListener("click", async () => {
+      if (!selectedFile) return;
+      analyzeButton.disabled = true;
+      showStatus("Analisando os registros da planilha…", "loading");
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      try {
+        const response = await fetch("/api/predict", { method: "POST", body: formData });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || "Não foi possível analisar a planilha.");
+        renderResults(data);
+        statusBox.className = "status";
+      } catch (error) {
+        showStatus(error.message || "Falha ao comunicar com a aplicação.", "error");
+      } finally {
+        analyzeButton.disabled = !selectedFile;
+      }
+    });
+  </script>
+</body>
+</html>
