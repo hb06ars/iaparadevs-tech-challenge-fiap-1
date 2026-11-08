@@ -365,19 +365,21 @@ python -m src.main
 
 ### Iniciar a aplicação web de demonstração
 
-Depois de executar o pipeline e gerar o modelo, instale as dependências da API:
+> **Observação:** antes de iniciar a aplicação web, execute `python -m src.main` na raiz do projeto. Essa etapa treina o modelo e gera `models/breast_cancer_logistic_regression.joblib`, que é carregado pela API para fazer as previsões. Se a API for iniciada sem esse arquivo, as análises não poderão ser realizadas.
+
+Depois que o pipeline concluir, instale as dependências da API:
 
 ```powershell
 pip install -r requirements-api.txt
 ```
 
-Inicie o servidor local:
+Inicie o servidor local; o navegador será aberto automaticamente quando a aplicação estiver pronta:
 
 ```powershell
-python -m uvicorn src.api:app --reload
+python -m src.web_runner
 ```
 
-Acesse `http://127.0.0.1:8000` para enviar um arquivo `.csv`. A API também disponibiliza a documentação interativa em `http://127.0.0.1:8000/docs` e um CSV de exemplo na própria página. O arquivo deve usar vírgulas para separar colunas e pontos para separar casas decimais. Ele deve ter uma linha de cabeçalho com as 30 características numéricas do modelo; as colunas `id` e `diagnosis` podem ser incluídas e serão ignoradas.
+A aplicação também pode ser iniciada sem abertura automática do navegador com `python -m uvicorn src.api:app --reload`. Acesse `http://127.0.0.1:8000` para enviar um arquivo `.csv`. A API disponibiliza ainda a documentação interativa em `http://127.0.0.1:8000/docs` e um CSV de exemplo na própria página. O arquivo deve usar vírgulas para separar colunas e pontos para separar casas decimais. Ele deve ter uma linha de cabeçalho com as 30 características numéricas do modelo; as colunas `id` e `diagnosis` podem ser incluídas e serão ignoradas.
 
 Esta interface é uma demonstração acadêmica: as classificações e probabilidades são experimentais, não constituem diagnóstico e não devem ser usadas para decisões clínicas.
 
