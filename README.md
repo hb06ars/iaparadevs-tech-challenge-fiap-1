@@ -478,3 +478,7 @@ A solução foi estruturada para permitir execução local e em container Docker
 ---
 
 **Projeto acadêmico desenvolvido para o Tech Challenge — Fase 1, FIAP.**
+
+
+## Criadores:
+- José Henrique Siqueira Brandão (hb06ars)
